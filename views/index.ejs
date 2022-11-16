@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>Quiz</title>
+  </head>
+  <style>
+    .disapear {
+      display: none;
+    }
+  </style>
+  <body onload="getData()">
+    <div style="text-align: center">
+      <p><b>You should get 70% marks to pass this Quiz.</b></p>
+    </div>
+    <div style="margin: 10px">
+      <div>
+        <h><b>Name:</b></h>
+        <p id="userName"></p>
+      </div>
+      <div>
+        <h><b>Email:</b></h>
+        <p id="userEmail"></p>
+      </div>
+      <div>
+        <h><b>Image:</b></h>
+        <p id="userimg"></p>
+      </div>
+    </div>
+    <div class="m-10">
+      <div id="show"></div>
+      <div id="result"></div>
+      <div class="right-0">
+        <div id="magic">
+          <button
+            onclick="submit()"
+            type="button"
+            class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            END QUIZ
+          </button>
+        </div>
+        <br />
+        <div class="disapear" id="btn2">
+          <button
+            onclick="result()"
+            type="button"
+            class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            GO TO RESULT PAGE
+          </button>
+        </div>
+      </div>
+    </div>
+    <script>
+      function getData() {
+        const data = localStorage.getItem("userData");
+        let Data = JSON.parse(data);
+        // console.log(Data);
+        let name = document.getElementById("userName");
+        let email = document.getElementById("userEmail");
+        let img = document.getElementById("userimg");
+        name.innerText = Data.name;
+        email.innerText = Data.email;
+        img.innerHTML = `<img src="${Data.image}" width="50px" height="50px" />`;
+        fetch("http://localhost:3000/index/data")
+          .then((response) => response.json())
+          .then((data) => {
+            for (let a = 0; a < data.length; a++) {
+              let id = data[a].id;
+              let question = data[a].question;
+              let option1 = data[a].option1;
+              let option2 = data[a].option2;
+              let option3 = data[a].option3;
+              let option4 = data[a].option4;
+              let co = data[a].correct;
+
+              let displayQuiz = document.getElementById("show");
+              displayQuiz.innerHTML += ` <div class="grid place-items-center w-3/8 ">
+                    <div class="p-10 bg-white w-1/2 rounded-lg shadow-md lg:shadow-lg">
+                      <form >
+                    <h1><b>Question: &nbsp;${question}</b></h1>
+                    <label class="opt1">
+                      <div style="display: flex;">
+                        <div id="qid" style="display: none;">${id}</div>
+                    <input type="radio" value="${option1}" name="answer" id="${co}"/>&nbsp;
+                    <div>${option1}</div>
+                  </div>
+                    </label>
+                    <label class="opt2">
+                      <div style="display: flex;">
+                    <input type="radio" value="${option2}" name="answer" id="${co}"/>&nbsp;
+                    <div>${option2}</div>
+                  </div>
+                    </label>
+                    <label class="opt3">
+                      <div style="display: flex;">
+                    <input type="radio" value="${option3}" name="answer" id="${co}"/>&nbsp;
+                    <div>${option3}</div>
+                  </div>
+                    </label>
+                    <label class="opt4">
+                      <div style="display: flex;">
+                     <input type="radio" value="${option4}" name="answer" id="${co}"/>&nbsp;
+                    <div>${option4}</div>
+                  </div>
+                    </label>
+                    </form><div><div></div>
+                      <div style="display: ">
+                      <div></div>
+                       </div>
+
+                      <div>
+                      </div>
+                      </div>
+                    </div>`;
+            }
+          });
+      }
+
+      function result() {
+        localStorage.setItem("userResult", JSON.stringify(userCheckedOptions));
+        location.assign("/result");
+      }
+
+      var userCheckedOptions = [];
+      // console.log(userCheckedOptions);
+
+      function submit() {
+        const value = getValue();
+        let btn = document.getElementById("magic");
+        btn.classList.add("disapear");
+        let btn2 = document.getElementById("btn2");
+        btn2.classList.remove("disapear");
+      }
+
+      const answers = document.getElementsByName("answer");
+      const getValue = () => {
+        let answer = {};
+        answers.forEach((v) => {
+          if (v.checked) {
+            answer = { UserAnswer: v.value, ansId: v.id };
+            userCheckedOptions.push(answer);
+          }
+        });
+      };
+    </script>
+  </body>
+</html>

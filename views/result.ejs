@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Result</title>
+  </head>
+  <style>
+    .display {
+      display: none;
+    }
+  </style>
+  <body>
+    <button onclick="Result()">CLICK HERE TO SHOW RESULT</button>
+    <h3 id="displayResult"></h3>
+
+    <script>
+      function Result() {
+        let data = JSON.parse(localStorage.getItem("userResult"));
+        let score = 0;
+        let totalQuestion = 10;
+
+        for (let i = 0; i < data.length; i++) {
+          let uoption = data[i].UserAnswer;
+          let coption = data[i].ansId;
+          console.log(uoption, coption);
+
+          if (String(uoption) == String(coption)) {
+            score += 1;
+            console.log("true");
+          } else {
+            score += 0;
+            console.log("false");
+          }
+          console.log(score);
+        }
+        let res = document.getElementById("displayResult");
+
+        if (totalQuestion - score <= 7) {
+          res.innerHTML = `Congratulations! You Passed this Quiz, You Score ${score} out of ${totalQuestion}`;
+        } else {
+          res.innerHTML = `Oops Failed! Please Try Again, You Score ${score} out of ${totalQuestion}`;
+        }
+        setTimeout(() => {
+          location.assign("/login");
+        }, 10000);
+      }
+    </script>
+  </body>
+</html>
