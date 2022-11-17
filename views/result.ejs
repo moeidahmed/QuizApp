@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <title>Result</title>
   </head>
   <style>
@@ -12,35 +14,39 @@
     }
   </style>
   <body>
-    <button onclick="Result()">CLICK HERE TO SHOW RESULT</button>
-    <h3 id="displayResult"></h3>
+    <button
+      onclick="Result()"
+      type="button"
+      class="bg-blue-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+    >
+      CLICK HERE TO SHOW RESULT</button
+    ><br />
+    <br />
+    <h id="displayResult"></h>
 
     <script>
       function Result() {
         let data = JSON.parse(localStorage.getItem("userResult"));
+        let totalQuestion = JSON.parse(localStorage.getItem("TQ"));
         let score = 0;
-        let totalQuestion = 10;
 
         for (let i = 0; i < data.length; i++) {
           let uoption = data[i].UserAnswer;
           let coption = data[i].ansId;
-          console.log(uoption, coption);
+          let length = data[i].qt;
 
           if (String(uoption) == String(coption)) {
             score += 1;
-            console.log("true");
           } else {
             score += 0;
-            console.log("false");
           }
-          console.log(score);
         }
         let res = document.getElementById("displayResult");
 
-        if (totalQuestion - score <= 7) {
-          res.innerHTML = `Congratulations! You Passed this Quiz, You Score ${score} out of ${totalQuestion}`;
+        if ((score / totalQuestion) * 100 >= 70) {
+          res.innerHTML = `<b>Congratulations! You Passed this Quiz, You Score ${score} out of ${totalQuestion}.</b>`;
         } else {
-          res.innerHTML = `Oops Failed! Please Try Again, You Score ${score} out of ${totalQuestion}`;
+          res.innerHTML = `<b>Oops Failed! Please Try Again, You Score ${score} out of ${totalQuestion}, You need to get 70% percent marks to pass this quiz.</b>`;
         }
         setTimeout(() => {
           location.assign("/login");
