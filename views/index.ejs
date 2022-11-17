@@ -60,16 +60,17 @@
       function getData() {
         const data = localStorage.getItem("userData");
         let Data = JSON.parse(data);
-        // console.log(Data);
         let name = document.getElementById("userName");
         let email = document.getElementById("userEmail");
         let img = document.getElementById("userimg");
         name.innerText = Data.name;
         email.innerText = Data.email;
-        img.innerHTML = `<img src="${Data.image}" width="50px" height="50px" />`;
+        img.innerHTML = `<img src="${Data.image}" class="border-radius: 1.5rem" width="50px" height="50px" />`;
         fetch("http://localhost:3000/index/data")
           .then((response) => response.json())
           .then((data) => {
+            // console.log(data);
+
             for (let a = 0; a < data.length; a++) {
               let id = data[a].id;
               let question = data[a].question;
@@ -78,7 +79,9 @@
               let option3 = data[a].option3;
               let option4 = data[a].option4;
               let co = data[a].correct;
-
+              let length = data.length;
+              localStorage.setItem("TQ", JSON.stringify(length));
+              // console.log(length);
               let displayQuiz = document.getElementById("show");
               displayQuiz.innerHTML += ` <div class="grid place-items-center w-3/8 ">
                     <div class="p-10 bg-white w-1/2 rounded-lg shadow-md lg:shadow-lg">
@@ -86,7 +89,7 @@
                     <h1><b>Question: &nbsp;${question}</b></h1>
                     <label class="opt1">
                       <div style="display: flex;">
-                        <div id="qid" style="display: none;">${id}</div>
+                        <div  style="display: none;">${id}</div>
                     <input type="radio" value="${option1}" name="answer" id="${co}"/>&nbsp;
                     <div>${option1}</div>
                   </div>
