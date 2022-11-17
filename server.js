@@ -31,7 +31,7 @@ app.get("/index", (req, res) => {
 app.get("/result", (req, res) => {
   res.render("result");
 });
-app.get("/admin", Auth, (req, res) => {
+app.get("/admin", (req, res) => {
   res.render("admin");
 });
 
@@ -76,10 +76,6 @@ function B(req, res) {
   );
 }
 
-function Auth(res, res, next) {
-  console.log("hello");
-  next();
-}
 
 app.post("/transfer", B);
 
